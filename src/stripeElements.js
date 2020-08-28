@@ -11,6 +11,7 @@ export const Stripe = {
   handleCardAction: null,
   confirmPaymentIntent: null,
   createPaymentMethod: null,
+  confirmCardPayment,
   elements: null
 }
 
@@ -66,6 +67,12 @@ export function create(elementType, key_or_stripe, options = {}) {
   Stripe.handleCardAction = (clientSecret) => Stripe.instance.handleCardAction(clientSecret)
   Stripe.confirmPaymentIntent = (clientSecret, data) => Stripe.instance.confirmPaymentIntent(clientSecret, element, data)
   Stripe.createPaymentMethod = (cardType, data) => Stripe.instance.createPaymentMethod(cardType, element, data)
+  Stripe.confirmCardPayment = (clientSecret, data) => Stripe.instance.confirmCardPayment(clientSecret, {
+    payment_method:{
+      card:element,
+      billing_details: {}
+    }
+  }, data)
   
   return element
 }
@@ -84,4 +91,5 @@ export function destroy() {
     Stripe.handleCardAction = null
     Stripe.confirmPaymentIntent = null
     Stripe.createPaymentMethod = null
+    Stripe.confirmCardPayment = null
 }
