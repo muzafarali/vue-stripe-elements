@@ -152,6 +152,66 @@ export default {
 }
 </style>
 ```
+
+Stripe 3d secure elements
+=================
+
+Even if it is recommended to use the unified Card element, single elements for each field are supported. The following example shows a possible use in a credit card component:
+
+```html
+<template>
+  <div>
+    <!-- <stripe-payment/> -->
+    <card class='stripe-card'
+      :class='{ complete }'
+      :stripe='stripeKey'
+      :options='stripeOptions'
+      :paymentReqOptions='reqParams'
+      @change='complete = $event.complete'
+      @token='payWithGpay'
+    />
+    <br>
+    <b-btn class='pay-with-stripe' @click='pay' :disabled='!complete' style="font-family: Libre Baskerville; font-size: 14px;">Pay by card</b-btn>
+  </div>
+</template>
+
+<script>
+import _ from 'lodash';
+import { Card, Stripe } from './index';
+  
+export default {
+  props: [ 'stripe', 'options' ],
+  data () {
+    return {
+    }
+  },
+  methods: {
+    async pay() {
+      
+      // step 1 Generate Payment intents by https://stripe.com/docs/api/payment_intents/create
+  
+      // step 2 createPaymentMethod  
+      const paymentMethodReq =  await Stripe.createPaymentMethod('card', {});
+      
+      // step 3 confirmCardPayment
+      let client_secret = get from server in step 1
+      const confirmPayment = await Stripe.confirmCardPayment(client_secret, {});
+  
+    }
+  },
+  watch: {
+    
+  }
+}
+</script>
+
+<style>
+.credit-card-inputs.complete {
+  border: 2px solid green;
+}
+</style>
+```
+
 ## Supported Stripe Elements Functions
 
 |Function|Reference|
